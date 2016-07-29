@@ -1,12 +1,12 @@
     'use strict';
-    app.factory("playStationService", [
-        function() {
+    app.factory("playStationService", ['$window',
+        function($window) {
             return {
                 getSystems: function() {
-                    return JSON.parse(localStorage.getItem("sys"));
+                    return JSON.parse($window.localStorage.getItem("sys"));
                 },
                 setSystems: function() {
-                    localStorage.setItem("sys", JSON.stringify([{
+                    $window.localStorage.setItem("sys", JSON.stringify([{
                         systemNumber: 1,
                         customer: {
                             name: null,
@@ -719,10 +719,10 @@
                     }]));
                 }, 
                 getCustomers: function(){
-                    return JSON.parse(localStorage.getItem("customers"));
+                    return JSON.parse($window.localStorage.getItem("customers"));
                 },
                 setCustomers: function(){
-                    localStorage.setItem("customers", JSON.stringify([]));
+                    $window.localStorage.setItem("customers", JSON.stringify([]));
                 }
             }
         }

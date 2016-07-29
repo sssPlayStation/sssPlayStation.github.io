@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('playStationCtrl', ['$scope', "$timeout", "playStationService",
-    function(scope, timeout, playStationService) {
+app.controller('playStationCtrl', ['$scope', "$timeout", "$window", "playStationService",
+    function(scope, timeout, $window, playStationService) {
 
         var promise;
         var systems = playStationService.getSystems();
@@ -93,7 +93,7 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "playStationService",
                 scope.systems[index].amount += scope.systems[index].invoiceDetails[i].amt;
             }
 
-            localStorage.setItem("sys", JSON.stringify(scope.systems));
+            $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
             promise = timeout(function() {
 
                     scope.systems[index].timeFinish = true;
@@ -106,7 +106,7 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "playStationService",
                     scope.systems[index].editBtn.show = false;
 
                     document.getElementById("play" + index).play();
-		            localStorage.setItem("sys", JSON.stringify(scope.systems));
+		            $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
                 },
                 (scope.systems[index].duration.hours * 30 * 1000 * 60)
 //                1000
@@ -121,7 +121,7 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "playStationService",
                 scope.systems[index].editBtn.disable = true;
                 scope.systems[index].editBtn.show = false;
             }
-            localStorage.setItem("sys", JSON.stringify(scope.systems));
+            $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
         };
 
         scope.edit = function(index) {
@@ -146,7 +146,7 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "playStationService",
 
 			scope.systems[index].cancelGameBtn.show=true;
             
-            localStorage.setItem("sys", JSON.stringify(scope.systems));
+            $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
 	    };
 
         scope.update = function(index) {
@@ -174,7 +174,7 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "playStationService",
                     scope.systems[index].continueBtn.show = true;
                     scope.systems[index].editBtn.show = false;
                     document.getElementById("#play" + index).play();
-		            localStorage.setItem("sys", JSON.stringify(scope.systems));
+		            $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
                 },
                 (scope.systems[index].duration.hours * 30 * 1000 * 60)
             );
@@ -188,7 +188,7 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "playStationService",
             
             scope.systems[index].updateBtn.show = false;
             scope.systems[index].cancelBtn.show = false;
-            localStorage.setItem("sys", JSON.stringify(scope.systems));            
+            $window.localStorage.setItem("sys", JSON.stringify(scope.systems));            
         }
         scope.cancel = function(index) {
             angular.copy(scope.master[index], scope.systems[index]);
@@ -197,7 +197,7 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "playStationService",
             // scope.systems[index].updateBtn.show = false;
             // scope.systems[index].cancelBtn.show = false;
 
-            localStorage.setItem("sys", JSON.stringify(scope.systems));            
+            $window.localStorage.setItem("sys", JSON.stringify(scope.systems));            
         }
 
         scope.continue = function(index) {
@@ -241,12 +241,12 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "playStationService",
 
 
                     document.getElementById("play" + index).play();
-                    localStorage.setItem("sys", JSON.stringify(scope.systems));            
+                    $window.localStorage.setItem("sys", JSON.stringify(scope.systems));            
                 },
                 (scope.systems[index].duration.hours * 30 * 1000 * 60)
 //  1000
             );
-            localStorage.setItem("sys", JSON.stringify(scope.systems));            
+            $window.localStorage.setItem("sys", JSON.stringify(scope.systems));            
 
         };
 
@@ -260,12 +260,12 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "playStationService",
 
         scope.stop = function(index) {
 			scope.customers.push(scope.systems[index]);
-	        localStorage.setItem("customers", JSON.stringify(scope.customers));
+	        $window.localStorage.setItem("customers", JSON.stringify(scope.customers));
 
             document.getElementById("play" + index).pause();
             scope.systems[index] = reset(index+1);
             timeout.cancel(promise);
-            localStorage.setItem("sys", JSON.stringify(scope.systems));
+            $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
         };
 
         scope.cancelGame = function(index) {
@@ -273,7 +273,7 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "playStationService",
             document.getElementById("play" + index).pause();
             scope.systems[index] = reset(index+1);
             timeout.cancel(promise);
-            localStorage.setItem("sys", JSON.stringify(scope.systems));
+            $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
         }
 
         scope.waiting = {
@@ -327,11 +327,11 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "playStationService",
         }
 
         scope.cleanSystems=function(){
-        	localStorage.removeItem("sys")
+        	$window.localStorage.removeItem("sys")
         }
 
         scope.cleanCustomers=function(){
-        	localStorage.removeItem("customers")
+        	$window.localStorage.removeItem("customers")
         }
 
         var pad2 = function(number) {
