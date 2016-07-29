@@ -1,0 +1,15 @@
+{
+  "name": "playstation",
+  "version": "1.0.0",
+  "description": "Play Station",
+  "main": "app.js",
+  "scripts": {
+    "test": "apptest.js"
+  },
+  "keywords": [
+    "Play",
+    "Station"
+  ],
+  "author": "Goverdhan Koyalkar",
+  "license": "ISC"
+}

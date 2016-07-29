@@ -1,0 +1,26 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin top by header height */
+  margin-top: 50px;
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+  background: #eee;
+}
+
+.app-header .navbar-default{
+  border-top: 3px solid #fdda24;
+}
+
+#navbar .nav li.active a{
+  background: #FF8C00;
+  color: #fff;
+}
+.navbar-brand, .company-name
+{
+  font-family: "Fjalla One";
+  font-style: small-caps;
+  font-size: 1.8em;
+}
