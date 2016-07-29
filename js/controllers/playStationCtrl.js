@@ -328,6 +328,7 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "$window", "playStation
 
         scope.cleanSystems=function(){
         	$window.localStorage.removeItem("sys")
+            alert("remove systems");
         }
 
         scope.cleanCustomers=function(){
