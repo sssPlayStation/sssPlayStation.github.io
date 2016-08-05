@@ -39,7 +39,7 @@
                         cancelBtn: {
                             disable: true,
                             show: false
-                        }, 
+                        },
                         updateBtn: {
                             disable: true,
                             show: false
@@ -54,6 +54,7 @@
                             value: null,
                             show: false
                         },
+                        timeInterval: null,
                         timeStamp: null,
                         amount: null,
                         status: false,
@@ -64,7 +65,8 @@
                         },
                         timeFinish: false,
                         editStartTimePanel: {
-                            disable: true, show: false
+                            disable: true,
+                            show: false
                         }
                     }, {
                         systemNumber: 2,
@@ -99,7 +101,8 @@
                         cancelBtn: {
                             disable: true,
                             show: false
-                        }, updateBtn: {
+                        },
+                        updateBtn: {
                             disable: true,
                             show: false
                         },
@@ -111,6 +114,7 @@
                         endTime: {
                             value: null
                         },
+                        timeInterval: null,
                         timeStamp: null,
                         amount: null,
                         status: false,
@@ -121,7 +125,7 @@
                         },
                         timeFinish: false,
                         editStartTimePanel: {
-                            disable: true, 
+                            disable: true,
                             show: false
                         }
                     }, {
@@ -157,7 +161,8 @@
                         cancelBtn: {
                             disable: true,
                             show: false
-                        }, updateBtn: {
+                        },
+                        updateBtn: {
                             disable: true,
                             show: false
                         },
@@ -171,6 +176,7 @@
                             value: null,
                             show: false
                         },
+                        timeInterval: null,
                         timeStamp: null,
                         amount: null,
                         status: false,
@@ -181,7 +187,8 @@
                         },
                         timeFinish: false,
                         editStartTimePanel: {
-                            disable: true, show: false
+                            disable: true,
+                            show: false
                         }
                     }, {
                         systemNumber: 4,
@@ -216,7 +223,8 @@
                         cancelBtn: {
                             disable: true,
                             show: false
-                        }, updateBtn: {
+                        },
+                        updateBtn: {
                             disable: true,
                             show: false
                         },
@@ -230,6 +238,7 @@
                             value: null,
                             show: false
                         },
+                        timeInterval: null,
                         timeStamp: null,
                         amount: null,
                         status: false,
@@ -240,7 +249,8 @@
                         },
                         timeFinish: false,
                         editStartTimePanel: {
-                            disable: true, show: false
+                            disable: true,
+                            show: false
                         }
                     }, {
                         systemNumber: 5,
@@ -275,7 +285,8 @@
                         cancelBtn: {
                             disable: true,
                             show: false
-                        }, updateBtn: {
+                        },
+                        updateBtn: {
                             disable: true,
                             show: false
                         },
@@ -289,6 +300,7 @@
                             value: null,
                             show: false
                         },
+                        timeInterval: null,
                         timeStamp: null,
                         amount: null,
                         status: false,
@@ -299,7 +311,7 @@
                         },
                         timeFinish: false,
                         editStartTimePanel: {
-                            disable: true, 
+                            disable: true,
                             show: false
                         }
                     }, {
@@ -335,7 +347,8 @@
                         cancelBtn: {
                             disable: true,
                             show: false
-                        }, updateBtn: {
+                        },
+                        updateBtn: {
                             disable: true,
                             show: false
                         },
@@ -349,6 +362,7 @@
                             value: null,
                             show: false
                         },
+                        timeInterval: null,
                         timeStamp: null,
                         amount: null,
                         status: false,
@@ -359,7 +373,8 @@
                         },
                         timeFinish: false,
                         editStartTimePanel: {
-                            disable: true, show: false
+                            disable: true,
+                            show: false
                         }
                     }, {
                         systemNumber: 7,
@@ -394,7 +409,8 @@
                         cancelBtn: {
                             disable: true,
                             show: false
-                        }, updateBtn: {
+                        },
+                        updateBtn: {
                             disable: true,
                             show: false
                         },
@@ -408,6 +424,7 @@
                             value: null,
                             show: false
                         },
+                        timeInterval: null,
                         timeStamp: null,
                         amount: null,
                         status: false,
@@ -418,7 +435,8 @@
                         },
                         timeFinish: false,
                         editStartTimePanel: {
-                            disable: true, show: false
+                            disable: true,
+                            show: false
                         }
                     }, {
                         systemNumber: 8,
@@ -453,7 +471,8 @@
                         cancelBtn: {
                             disable: true,
                             show: false
-                        }, updateBtn: {
+                        },
+                        updateBtn: {
                             disable: true,
                             show: false
                         },
@@ -467,6 +486,7 @@
                             value: null,
                             show: false
                         },
+                        timeInterval: null,
                         timeStamp: null,
                         amount: null,
                         status: false,
@@ -477,7 +497,8 @@
                         },
                         timeFinish: false,
                         editStartTimePanel: {
-                            disable: true, show: false
+                            disable: true,
+                            show: false
                         }
                     }, {
                         systemNumber: 9,
@@ -512,7 +533,8 @@
                         cancelBtn: {
                             disable: true,
                             show: false
-                        }, updateBtn: {
+                        },
+                        updateBtn: {
                             disable: true,
                             show: false
                         },
@@ -526,6 +548,7 @@
                             value: null,
                             show: false
                         },
+                        timeInterval: null,
                         timeStamp: null,
                         amount: null,
                         status: false,
@@ -536,7 +559,8 @@
                         },
                         timeFinish: false,
                         editStartTimePanel: {
-                            disable: true, show: false
+                            disable: true,
+                            show: false
                         }
                     }, {
                         systemNumber: 10,
@@ -571,7 +595,8 @@
                         cancelBtn: {
                             disable: true,
                             show: false
-                        }, updateBtn: {
+                        },
+                        updateBtn: {
                             disable: true,
                             show: false
                         },
@@ -585,6 +610,7 @@
                             value: null,
                             show: false
                         },
+                        timeInterval: null,
                         timeStamp: null,
                         amount: null,
                         status: false,
@@ -595,14 +621,15 @@
                         },
                         timeFinish: false,
                         editStartTimePanel: {
-                            disable: true, show: false
+                            disable: true,
+                            show: false
                         }
                     }]));
-                }, 
-                getCustomers: function(){
+                },
+                getCustomers: function() {
                     return JSON.parse($window.localStorage.getItem("customers"));
                 },
-                setCustomers: function(){
+                setCustomers: function() {
                     $window.localStorage.setItem("customers", JSON.stringify([]));
                 }
             }

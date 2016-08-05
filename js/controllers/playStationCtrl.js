@@ -50,228 +50,237 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "$window", "playStation
             [50, 60]
         ];
 
-        scope.enableStart = function(index) {
-            if (!scope.systems[index].customer.name && !scope.systems[index].members.count && !scope.systems[index].duration.hours) {
-                scope.systems[index].startBtn.disable = true;
+        scope.enableStart = function(obj, index) {
+            if (!obj.customer.name && !obj.members.count && !obj.duration.hours) {
+                obj.startBtn.disable = true;
             } else {
-                scope.systems[index].startBtn.disable = false;
+                obj.startBtn.disable = false;
             }
         };
 
-        scope.start = function(index) {
+        scope.start = function(obj, index) {
+            obj.status = true;
             date = new Date();
-            laterTime = new Date(date.getTime() + scope.systems[index].duration.hours * 30 * 60 * 1000);
-            scope.systems[index].customer.disable = true;
-            scope.systems[index].members.disable = true;
-            scope.systems[index].duration.disable = true;
+            obj.timeStamp = date;
+            laterTime = new Date(date.getTime() + obj.duration.hours * 30 * 60 * 1000);
+            obj.timeInterval = laterTime-date;
 
-            scope.systems[index].startBtn.disable = true;
-            scope.systems[index].startBtn.show = false;
+            obj.customer.disable = true;
+            obj.members.disable = true;
+            obj.duration.disable = true;
 
-            scope.systems[index].stopBtn.disable = false;
-            scope.systems[index].stopBtn.show = true;
+            obj.startBtn.disable = true;
+            obj.startBtn.show = false;
 
-            scope.systems[index].editBtn.disable = false;
-            scope.systems[index].editBtn.show = true;
+            obj.stopBtn.disable = false;
+            obj.stopBtn.show = true;
 
-            scope.systems[index].editStartTimePanel.show=false;
+            obj.editBtn.disable = false;
+            obj.editBtn.show = true;
 
-            scope.systems[index].timeStamp = new Date();
+            obj.cancelGameBtn.show = true;
 
-            scope.systems[index].startTime.value = date;
-            scope.systems[index].endTime.value = new Date(laterTime);
+            obj.editStartTimePanel.show = false;
 
-            scope.systems[index].invoiceDetails.push({
-                'mem': scope.membersList[scope.systems[index].members.count - 1].key,
-                'mins': scope.durationsList[scope.systems[index].duration.hours - 1].key,
-                'duration': {st:scope.systems[index].startTime.value, et:scope.systems[index].endTime.value},
-                'amt': priceList[scope.systems[index].members.count - 1][scope.systems[index].duration.hours - 1]
+
+            obj.startTime.value = date;
+            obj.endTime.value = new Date(laterTime);
+
+            obj.invoiceDetails.push({
+                'mem': scope.membersList[obj.members.count - 1].key,
+                'mins': scope.durationsList[obj.duration.hours - 1].key,
+                'duration': {
+                    st: obj.startTime.value,
+                    et: obj.endTime.value
+                },
+                'amt': priceList[obj.members.count - 1][obj.duration.hours - 1]
             });
-            scope.systems[index].status = true;
-
-            for (var i = 0; i < scope.systems[index].invoiceDetails.length; i++) {
-                scope.systems[index].amount += scope.systems[index].invoiceDetails[i].amt;
+            for (var i = 0; i < obj.invoiceDetails.length; i++) {
+                obj.amount += obj.invoiceDetails[i].amt;
             }
 
             $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
             promise = timeout(function() {
 
-                    scope.systems[index].timeFinish = true;
-                    scope.systems[index].members.disable = false;
-                    scope.systems[index].duration.disable = false;
-                    scope.systems[index].continueBtn.disable = false;
-                    scope.systems[index].continueBtn.show = true;
+                    obj.timeFinish = true;
+                    obj.members.disable = false;
+                    obj.duration.disable = false;
+                    obj.continueBtn.disable = false;
+                    obj.continueBtn.show = true;
 
-                    scope.systems[index].editBtn.disable = true;
-                    scope.systems[index].editBtn.show = false;
+                    obj.editBtn.disable = true;
+                    obj.editBtn.show = false;
 
                     document.getElementById("play" + index).play();
-		            $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
-                },
-                (scope.systems[index].duration.hours * 30 * 1000 * 60)
-//                1000
-            );
+                    $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
+                }, obj.timeInterval);
         };
 
-        scope.enableEdit = function(index) {
-            if (!scope.systems[index].customer.name && !scope.systems[index].members.count && !scope.systems[index].duration.hours && scope.systems[index].startBtn.disable) {
-                scope.systems[index].editBtn.disable = false;
-                scope.systems[index].editBtn.show = true;
+        scope.enableEdit = function(obj, index) {
+            if (!obj.customer.name && !obj.members.count && !obj.duration.hours && obj.startBtn.disable) {
+                obj.editBtn.disable = false;
+                obj.editBtn.show = true;
             } else {
-                scope.systems[index].editBtn.disable = true;
-                scope.systems[index].editBtn.show = false;
+                obj.editBtn.disable = true;
+                obj.editBtn.show = false;
             }
             $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
         };
 
-        scope.edit = function(index) {
-            scope.systems[index].startBtn.disable = true;
-            scope.master[index] = angular.copy(scope.systems[index]);
-            scope.systems[index].editMode = true;
+        scope.edit = function(obj, index) {
+            obj.startBtn.disable = true;
+            scope.master[index] = angular.copy(obj);
+            obj.editMode = true;
 
-            scope.systems[index].members.disable = false;
-            scope.systems[index].duration.disable = false;
+            obj.members.disable = false;
+            obj.duration.disable = false;
 
 
-            scope.systems[index].editBtn.disable = true;
-            scope.systems[index].editBtn.show = false;
+            obj.editBtn.disable = true;
+            obj.editBtn.show = false;
 
-            scope.systems[index].updateBtn.disable = false;
-            scope.systems[index].updateBtn.show = true;
+            obj.updateBtn.disable = false;
+            obj.updateBtn.show = true;
 
-            scope.systems[index].cancelBtn.disable = false;
-            scope.systems[index].cancelBtn.show = true;
+            obj.cancelBtn.disable = false;
+            obj.cancelBtn.show = true;
 
-			scope.systems[index].editStartTimePanel.show=true;
+            obj.editStartTimePanel.show = true;
 
-			scope.systems[index].cancelGameBtn.show=true;
-            
+            obj.cancelGameBtn.show = true;
+
             $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
-	    };
+        };
 
-        scope.update = function(index) {
-            scope.systems[index].amount = null;
-            scope.systems[index].endTime.value = new Date(new Date(scope.systems[index].startTime.value).getTime() + (scope.systems[index].duration.hours * 30 * 60 * 1000));
-            scope.systems[index].invoiceDetails[scope.systems[index].invoiceDetails.length - 1].mem = scope.membersList[scope.systems[index].members.count - 1].key;
-            scope.systems[index].invoiceDetails[scope.systems[index].invoiceDetails.length - 1].duration = {st:scope.systems[index].startTime.value, et:scope.systems[index].endTime.value};
-            scope.systems[index].invoiceDetails[scope.systems[index].invoiceDetails.length - 1].mins = scope.durationsList[scope.systems[index].duration.hours - 1].key;
-            scope.systems[index].invoiceDetails[scope.systems[index].invoiceDetails.length - 1].amt = priceList[scope.systems[index].members.count - 1][scope.systems[index].duration.hours - 1];
+        scope.update = function(obj, index) {
+            obj.amount = null;
+            obj.endTime.value = new Date(new Date(obj.startTime.value).getTime() + (obj.duration.hours * 30 * 60 * 1000));
+            obj.invoiceDetails[obj.invoiceDetails.length - 1].mem = scope.membersList[obj.members.count - 1].key;
+            obj.invoiceDetails[obj.invoiceDetails.length - 1].duration = {
+                st: obj.startTime.value,
+                et: obj.endTime.value
+            };
+            obj.invoiceDetails[obj.invoiceDetails.length - 1].mins = scope.durationsList[obj.duration.hours - 1].key;
+            obj.invoiceDetails[obj.invoiceDetails.length - 1].amt = priceList[obj.members.count - 1][obj.duration.hours - 1];
 
-			scope.systems[index].editMode = false;
-			
-			scope.systems[index].editStartTimePanel.show=false;
+            obj.editMode = false;
 
-			scope.systems[index].cancelGameBtn.show=false;
+            obj.editStartTimePanel.show = false;
 
-            for (var i = 0; i < scope.systems[index].invoiceDetails.length; i++) {
-                scope.systems[index].amount += scope.systems[index].invoiceDetails[i].amt;
+            obj.cancelGameBtn.show = true;
+
+            for (var i = 0; i < obj.invoiceDetails.length; i++) {
+                obj.amount += obj.invoiceDetails[i].amt;
             }
 
             promise = timeout(function() {
-                    scope.systems[index].timeFinish = true;
-                    scope.systems[index].members.disable = false;
-                    scope.systems[index].duration.disable = false;
-                    scope.systems[index].continueBtn.show = true;
-                    scope.systems[index].editBtn.show = false;
-                    document.getElementById("#play" + index).play();
-		            $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
+                obj.timeFinish = true;
+                obj.members.disable = false;
+                obj.duration.disable = false;
+                obj.continueBtn.show = true;
+                obj.editBtn.show = false;
+                document.getElementById("#play" + index).play();
+                $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
+            }, (obj.duration.hours * 30 * 1000 * 60));
+
+            obj.members.disable = true;
+            obj.duration.disable = true;
+            obj.startBtn.disable = true;
+
+            obj.editBtn.disable = false;
+            obj.editBtn.show = true;
+
+            obj.updateBtn.show = false;
+            obj.cancelBtn.show = false;
+            $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
+        }
+        scope.cancel = function(obj, index) {
+            angular.copy(scope.master[index], obj);
+            // obj.editMode = false;
+            // obj.editBtn.show = true;
+            // obj.updateBtn.show = false;
+            // obj.cancelBtn.show = false;
+
+            $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
+        }
+
+        scope.continue = function(obj, index) {
+            obj.amount = null;
+            obj.members.disable = true;
+            obj.duration.disable = true;
+            obj.editBtn.show = true;
+            obj.editBtn.disable = false;
+
+            obj.continueBtn.disable = true;
+            obj.continueBtn.show = false;
+            obj.startTime.show = true;
+
+            var et = new Date(obj.endTime.value).getTime() + (obj.duration.hours * 30 * 60 * 1000);
+            obj.endTime.show = true;
+            obj.invoiceDetails.push({
+                'mem': scope.membersList[obj.members.count - 1].key,
+                'mins': scope.durationsList[obj.duration.hours - 1].key,
+                'duration': {
+                    st: obj.endTime.value,
+                    et: new Date(et)
                 },
-                (scope.systems[index].duration.hours * 30 * 1000 * 60)
-            );
-
-            scope.systems[index].members.disable = true;
-            scope.systems[index].duration.disable = true;
-            scope.systems[index].startBtn.disable = true;
-            
-            scope.systems[index].editBtn.disable = false;            
-            scope.systems[index].editBtn.show = true;
-            
-            scope.systems[index].updateBtn.show = false;
-            scope.systems[index].cancelBtn.show = false;
-            $window.localStorage.setItem("sys", JSON.stringify(scope.systems));            
-        }
-        scope.cancel = function(index) {
-            angular.copy(scope.master[index], scope.systems[index]);
-            // scope.systems[index].editMode = false;
-            // scope.systems[index].editBtn.show = true;
-            // scope.systems[index].updateBtn.show = false;
-            // scope.systems[index].cancelBtn.show = false;
-
-            $window.localStorage.setItem("sys", JSON.stringify(scope.systems));            
-        }
-
-        scope.continue = function(index) {
-            scope.systems[index].amount = null;
-            scope.systems[index].members.disable = true;
-            scope.systems[index].duration.disable = true;
-            scope.systems[index].editBtn.show = true;
-            scope.systems[index].editBtn.disable = false;
-
-            scope.systems[index].continueBtn.disable = true;
-            scope.systems[index].continueBtn.show = false;
-            scope.systems[index].startTime.show = true;
-
-            var et = new Date(scope.systems[index].endTime.value).getTime() + (scope.systems[index].duration.hours * 30 * 60 * 1000);
-			scope.systems[index].endTime.show=true;
-            scope.systems[index].invoiceDetails.push({
-                'mem': scope.membersList[scope.systems[index].members.count - 1].key,
-                'mins': scope.durationsList[scope.systems[index].duration.hours - 1].key,
-                'duration': {st:scope.systems[index].endTime.value, et: new Date(et)},
-                'amt': priceList[scope.systems[index].members.count - 1][scope.systems[index].duration.hours - 1]
+                'amt': priceList[obj.members.count - 1][obj.duration.hours - 1]
             });
 
-            scope.systems[index].endTime.value = new Date(et);
-            scope.systems[index].status = true;
+            obj.endTime.value = new Date(et);
+            obj.status = true;
 
-            for (var i = 0; i < scope.systems[index].invoiceDetails.length; i++) {
-                scope.systems[index].amount += scope.systems[index].invoiceDetails[i].amt;
+            for (var i = 0; i < obj.invoiceDetails.length; i++) {
+                obj.amount += obj.invoiceDetails[i].amt;
             }
 
-            scope.systems[index].timeFinish = false;
+            obj.timeFinish = false;
             document.getElementById("play" + index).pause();
 
             promise = timeout(function() {
-                    scope.systems[index].timeFinish = true;
-                    scope.systems[index].members.disable = false;
-                    scope.systems[index].duration.disable = false;
-                    scope.systems[index].continueBtn.disable = false;
-                    scope.systems[index].continueBtn.show = true;
-	    	        scope.systems[index].editBtn.show = false;
-    	    	    scope.systems[index].editBtn.disable = true;
+                    obj.timeFinish = true;
+                    obj.members.disable = false;
+                    obj.duration.disable = false;
+                    obj.continueBtn.disable = false;
+                    obj.continueBtn.show = true;
+                    obj.editBtn.show = false;
+                    obj.editBtn.disable = true;
 
 
                     document.getElementById("play" + index).play();
-                    $window.localStorage.setItem("sys", JSON.stringify(scope.systems));            
-                },
-                (scope.systems[index].duration.hours * 30 * 1000 * 60)
-//  1000
+                    $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
+                }, (obj.duration.hours * 30 * 1000 * 60)
+                //  1000
             );
-            $window.localStorage.setItem("sys", JSON.stringify(scope.systems));            
+            $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
 
         };
 
-        scope.enableContine = function(index) {
-            if (scope.systems[index].members.count == null && scope.systems[index].duration.hours == null && !scope.systems[index].timeFinish) {
+        scope.enableContine = function(obj, index) {
+            if (obj.members.count == null && obj.duration.hours == null && !obj.timeFinish) {
                 return true;
             } else {
                 return false;
             }
         }
 
-        scope.stop = function(index) {
-			scope.customers.push(scope.systems[index]);
-	        $window.localStorage.setItem("customers", JSON.stringify(scope.customers));
+        scope.stop = function(obj, index) {
+
+            obj.status = false;
+            scope.customers.push(obj);
+            $window.localStorage.setItem("customers", JSON.stringify(scope.customers));
 
             document.getElementById("play" + index).pause();
-            scope.systems[index] = reset(index+1);
+            obj = new reset(index + 1);
+            scope.systems[index] = obj;
             timeout.cancel(promise);
             $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
         };
 
-        scope.cancelGame = function(index) {
-
+        scope.cancelGame = function(obj, index) {
+            obj.status = false;
             document.getElementById("play" + index).pause();
-            scope.systems[index] = reset(index+1);
+            scope.systems[index] = new reset(index + 1);
             timeout.cancel(promise);
             $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
         }
@@ -326,13 +335,13 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "$window", "playStation
             scope.waitList.splice(index, 1);
         }
 
-        scope.cleanSystems=function(){
-        	$window.localStorage.removeItem("sys")
+        scope.cleanSystems = function() {
+            $window.localStorage.removeItem("sys")
             alert("remove systems");
         }
 
-        scope.cleanCustomers=function(){
-        	$window.localStorage.removeItem("customers")
+        scope.cleanCustomers = function() {
+            $window.localStorage.removeItem("customers")
         }
 
         var pad2 = function(number) {
@@ -394,11 +403,11 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "$window", "playStation
                     disable: true,
                     show: false
                 },
-                timeFinish: false, 
+                timeFinish: false,
                 editStartTimePanel: {
-                            disable: true, 
-                            show: false
-                        }
+                    disable: true,
+                    show: false
+                }
             }
         }
     }
