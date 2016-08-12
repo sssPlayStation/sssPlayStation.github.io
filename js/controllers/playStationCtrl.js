@@ -58,12 +58,21 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "$window", "playStation
             }
         };
 
-        scope.start = function(obj, index) {
+        scope.start = function(obj1, index) {
+            var obj = reset(index)
+
+            obj.customer.name = obj1.customer.name;
+            obj.members.count = obj1.members.count;
+            obj.systemNumber = parseInt(index)+1;
+            obj.duration.hours = obj1.duration.hours;
+
+            scope.waiting = reset(null);
+
             obj.status = true;
             date = new Date();
             obj.timeStamp = date;
             laterTime = new Date(date.getTime() + obj.duration.hours * 30 * 60 * 1000);
-            obj.timeInterval = laterTime-date;
+            obj.timeInterval = laterTime - date;
 
             obj.customer.disable = true;
             obj.members.disable = true;
@@ -98,22 +107,25 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "$window", "playStation
             for (var i = 0; i < obj.invoiceDetails.length; i++) {
                 obj.amount += obj.invoiceDetails[i].amt;
             }
-
+            scope.systems[index]= obj;
             $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
             promise = timeout(function() {
 
-                    obj.timeFinish = true;
-                    obj.members.disable = false;
-                    obj.duration.disable = false;
-                    obj.continueBtn.disable = false;
-                    obj.continueBtn.show = true;
+                obj.timeFinish = true;
+                obj.members.disable = false;
+                obj.duration.disable = false;
+                obj.continueBtn.disable = false;
+                obj.continueBtn.show = true;
 
-                    obj.editBtn.disable = true;
-                    obj.editBtn.show = false;
+                obj.editBtn.disable = true;
+                obj.editBtn.show = false;
 
-                    document.getElementById("play" + index).play();
-                    $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
-                }, obj.timeInterval);
+                document.getElementById("play" + index).play();
+                scope.systems[index]= obj;
+                $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
+            }, obj.timeInterval);
+
+
         };
 
         scope.enableEdit = function(obj, index) {
@@ -179,7 +191,7 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "$window", "playStation
                 obj.duration.disable = false;
                 obj.continueBtn.show = true;
                 obj.editBtn.show = false;
-                document.getElementById("#play" + index).play();
+                document.getElementById("#play" + obj.systemNumber).play();
                 $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
             }, (obj.duration.hours * 30 * 1000 * 60));
 
@@ -192,6 +204,8 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "$window", "playStation
 
             obj.updateBtn.show = false;
             obj.cancelBtn.show = false;
+//            scope.systems[obj.systemNumber+1] = obj;
+//            scope.systems[index] = reset(index+1);
             $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
         }
         scope.cancel = function(obj, index) {
@@ -285,15 +299,13 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "$window", "playStation
             $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
         }
 
-        scope.waiting = {
-            customer: {
-                name: null
-            },
-            members: {
-                count: null
-            },
-            duration: {
-                hours: null
+
+        scope.calculateAmount=function(){
+
+            if(scope.waiting.customer.name!= null && scope.waiting.members.count!= null && scope.waiting.duration.hours!= null ){
+                scope.waiting.amount = priceList[scope.waiting.members.count - 1][scope.waiting.duration.hours - 1]                
+            }else{
+                scope.waiting.amount =null;
             }
         };
 
@@ -333,20 +345,20 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "$window", "playStation
 
         scope.removeWaiting = function(index) {
             scope.waitList.splice(index, 1);
-        }
+        };
 
         scope.cleanSystems = function() {
             $window.localStorage.removeItem("sys")
             alert("remove systems");
-        }
+        };
 
         scope.cleanCustomers = function() {
             $window.localStorage.removeItem("customers")
-        }
+        };
 
         var pad2 = function(number) {
             return (number < 10 ? '0' : '') + number
-        }
+        };
         var reset = function(systemNumber) {
             return {
                 systemNumber: systemNumber,
@@ -409,6 +421,8 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "$window", "playStation
                     show: false
                 }
             }
-        }
+        };
+        scope.waiting = reset(null);
+
     }
 ]);
