@@ -133,6 +133,7 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "$window", "playStation
         }
 
         scope.start = function(obj, index) {
+            console.log(obj)
             obj.status = true;
             obj.amount = null;
             date = new Date();
@@ -386,13 +387,12 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "$window", "playStation
             return flag;
         }
         scope.wait = function(obj) {
-console.log(obj)
+            
             scope.waitingList.push(obj);
             $window.localStorage.setItem("waitingList", JSON.stringify(scope.waitingList));
-
-
         };
-        scope.assignSystem = function(index, sysNum) {
+        scope.assignSystem = function(obj, systemNumber, index) {
+            scope.start(obj, systemNumber);
             scope.waitingList.splice(index, 1);
             $window.localStorage.setItem("waitingList", JSON.stringify(scope.waitingList));
         };

@@ -61,9 +61,8 @@
 					<td>
 				</td>
 				<td>
-									<input type="button" class="btn btn-xs btn-primary" id="remove{{$index}}" ng-disabledd="!cust.availableSysNumber" value="Assign" ng-click="assignSystem($index, cust.availableSysNumber)" />
-
-					<input type="button" class="btn btn-xs btn-primary" id="remove{{$index}}" value="Remove" ng-click="removeWaiting($index)" />
+					<button class="btn btn-xs btn-primary" ng-click="assignSystem(cust, cust.systemNumber, $index)">Assign</button>
+					<button class="btn btn-xs btn-primary" ng-click="removeWaiting($index)">Remove</button>
 				</td>
 			</tr>
 		</table>
