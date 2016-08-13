@@ -13,7 +13,6 @@
 		}
 	</style>
 	<div class="row">
-		<div class="row">
 			<h4>Add Customer</h4>
 			<table class="table">
 				<thead>
@@ -24,42 +23,46 @@
 						<input type="text" ng-model="waiting.customer.name" class="form-control"/>
 					</td>
 					<td>
-						<select ng-model="waiting.systemNumber" class="form-control">
-							<option value="">Select</option>
-							<option ng-repeat="option in systems" value={{$index}} ng-disabled="option.status">Sys #{{$index+1}}</option>
+						<select ng-model="waiting.systemNumber" class="form-control" ng-change="calculateAmount()">
+							<option value="null">Select</option>
+							<option ng-repeat="option in numberOfSystems" value={{option}} ng-if="!systemStatus($index+1)">Sys #{{option}}</option>
 						</select>
 					</td>
 					<td><select ng-model="waiting.members.count" class="form-control" ng-change="calculateAmount()" ng-options="value.value as value.key for (key, value) in membersList">
-						<option value="">Select Players</option>
+						<option value="null">Select Players</option>
 					</select>
 				</td>
 				<td>
 					<select ng-model="waiting.duration.hours" class="form-control" ng-change="calculateAmount()" ng-options="value.value as value.key for (key, value) in durationsList">
-						<option value="">Select Duration</option>
+						<option value="null">Select Duration</option>
 					</select>
 				</td>
 				<td>{{waiting.amount}}</td>
 				<td>
-					<button class="btn btn-xs btn-primary" ng-disabledd="enableWait()" ng-click="wait()">Wait</button>
-					<button class="btn btn-xs btn-primary" ng-click="start(waiting, waiting.systemNumber)">Start</button>
+					<button class="btn btn-xs btn-primary" ng-disabled="enableWait1()" ng-click="wait(waiting)">Wait</button>
+					<button class="btn btn-xs btn-primary" ng-disabled="enableStart()" ng-click="start(waiting, waiting.systemNumber)">Start</button>
 				</td>
 			</tr>
 		</table>
+		<div ng-if="waitingList.length">
+		<h4>Waiting Customers</h4>
 		<table class="table">
-			<tr ng-repeat="cust in waitList track by $index">
-				<td>{{cust.customerName}}</td>
-				<td>{{cust.members}}</td>
-				<td>{{cust.duration}}</td>
+		<tr><th>Name</th><th>System Number</th><th>Players</th><th>Duration</th><th>Amount</th><th></th></tr>
+			<tr ng-repeat="cust in waitingList track by $index">
+				<td>{{cust.customer.name}}</td>
 				<td>
-					<select ng-model="waiting.systemNumber" class="form-control">
-						<option value="">Assign System</option>
-						<option ng-repeat="option in systems" value="{{option.systemNumber}}" ng-if="!option.status">Sys #{{option.systemNumber}}</option>
+					<select ng-model="cust.systemNumber" class="form-control">
+					<option value="">Select</option>
+						<option ng-repeat="option in numberOfSystems" value={{option}} ng-if="!systemStatus($index+1)">{{option}}</option>
 					</select>
 				</td>
-				<td>
-					<input type="button" class="btn btn-xs btn-primary" id="remove{{$index}}" ng-disabledd="!cust.availableSysNumber" value="Assign" ng-click="assignSystem($index, cust.availableSysNumber)" />
+			<td>{{membersList[cust.members.count-1].key}}</td>
+				<td>{{durationsList[cust.duration.hours-1].key}}</td>
+					<td>
 				</td>
 				<td>
+									<input type="button" class="btn btn-xs btn-primary" id="remove{{$index}}" ng-disabledd="!cust.availableSysNumber" value="Assign" ng-click="assignSystem($index, cust.availableSysNumber)" />
+
 					<input type="button" class="btn btn-xs btn-primary" id="remove{{$index}}" value="Remove" ng-click="removeWaiting($index)" />
 				</td>
 			</tr>
@@ -81,18 +84,19 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="system in systems track by $index" ng-class="{'timeFinished': system.timeFinish}" ng-if="system.status">
-				<td>{{system.systemNumber}}
-<!-- 					<span class="pull-left" ng-if="!system.editMode">{{system.systemNumber}}</span>
+				<td>
+					<span class="pull-left" ng-if="!system.editMode">{{system.systemNumber}}</span>
 					<div ng-if="system.editMode">					
 					<select ng-model="system.systemNumber" class="form-control">
-						<option ng-repeat="opt in systems" value={{$index}} ng-if="!opt.status">Sys #{{$index+1}}</option>
+						<option ng-repeat="option in numberOfSystems" value={{option}} ng-if="!systemStatus($index+1)">{{option}}</option>
 					</select>
 				</div>
- -->			<audio id="play{{$index}}" src="audio/beep-07.wav" loop="false"></audio>
+			<audio id="play{{$index}}" src="/audio/beep-07.wav" loop="false"></audio>
 		</td>
 		<td>
 			<div>
-				<!-- 				<input type="text" ng-model="system.customer.name" ng-keyup="enableStart(system, $index)" ng-disabled="system.customer.disable" class="form-control" />
+				<!-- 				
+				<input type="text" ng-model="system.customer.name" ng-keyup="enableStart(system, $index)" ng-disabled="system.customer.disable" class="form-control" />
 				-->
 				{{system.customer.name}}
 			</div>
