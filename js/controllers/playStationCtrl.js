@@ -43,6 +43,7 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "$window", "playStation
             key: "5 or 6 Players",
             value: 3
         }];
+
         scope.durationsList = [{
             key: "30 mins",
             value: 1
@@ -50,6 +51,7 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "$window", "playStation
             key: "60 mins",
             value: 2
         }];
+
         var priceList = [
             [10, 20],
             [30, 40],
@@ -119,18 +121,21 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "$window", "playStation
                 }
             }
         };
+
         scope.waiting = new reset("null");
 
         scope.systemStatus= function(index)
         {
             var flag=false;
             angular.forEach(scope.systems, function(system){
+                if(system!=null){
                 if(system.systemNumber==index && system.status){
                     flag=true;
                 }
+            }
             })
             return flag;
-        }
+        };
 
         scope.start = function(obj, index) {
             console.log(obj)
@@ -174,10 +179,9 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "$window", "playStation
             for (var i = 0; i < obj.invoiceDetails.length; i++) {
                 obj.amount += obj.invoiceDetails[i].amt;
             }
-            scope.systems.push(obj);
+            scope.systems[index]= obj;
             $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
             promise = timeout(function() {
-
                 scope.systems[index].timeFinish = true;
                 scope.systems[index].members.disable = false;
                 scope.systems[index].duration.disable = false;
@@ -269,10 +273,8 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "$window", "playStation
 
             obj.updateBtn.show = false;
             obj.cancelBtn.show = false;
-//            scope.systems[obj.systemNumber+1] = obj;
-//            scope.systems[index] = reset(index+1);
             $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
-        }
+        };
         scope.cancel = function(obj, index) {
             angular.copy(scope.master[index], obj);
             // obj.editMode = false;
@@ -281,7 +283,7 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "$window", "playStation
             // obj.cancelBtn.show = false;
 
             $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
-        }
+        };
 
         scope.continue = function(obj, index) {
             obj.amount = null;
@@ -362,33 +364,33 @@ app.controller('playStationCtrl', ['$scope', "$timeout", "$window", "playStation
             scope.systems[index] = new reset(index + 1);
             timeout.cancel(promise);
             $window.localStorage.setItem("sys", JSON.stringify(scope.systems));
-        }
+        };
 
 
         scope.calculateAmount=function(){
-            if(scope.waiting.members.count && scope.waiting.duration.hours ){
+            if(scope.waiting.members.count!=null && scope.waiting.duration.hours!=null ){
                 scope.waiting.amount = priceList[scope.waiting.members.count - 1][scope.waiting.duration.hours - 1]                
             }
         };
-
+        
+        scope.calculateAmount();
+        
         scope.enableWait = function() {
-            if (!scope.waiting.customer.name || !scope.waiting.members.count || !scope.waiting.duration.hours) {
-                return false;
-            } else {
-                return true;
-            }
-
-        }
+            var flag = true;
+            if(scope.waiting.customer.name && scope.waiting.members.count && scope.waiting.duration.hours) {
+                flag = false;
+            } 
+            return flag;
+        };
          scope.enableStart = function() {
             var flag = true;
             if (scope.waiting.customer.name && scope.waiting.systemNumber!="null" && scope.waiting.members.count && scope.waiting.duration.hours) {
                 flag = false;
             } 
             return flag;
-        }
+        };
         scope.wait = function(obj) {
-            
-            scope.waitingList.push(obj);
+            scope.waitingList.push(JSON.parse(JSON.stringify(obj)));
             $window.localStorage.setItem("waitingList", JSON.stringify(scope.waitingList));
         };
         scope.assignSystem = function(obj, systemNumber, index) {
